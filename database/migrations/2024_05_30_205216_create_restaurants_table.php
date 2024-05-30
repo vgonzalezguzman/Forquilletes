@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->required();
             $table->string('description', 500)->default('');
+            $table->foreignId('owner')->nullable()->references('id')->on('users')->default(null)->nullOnDelete()->nullable();
+            $table->foreignId('uploader')->nullable()->references('id')->on('users')->default(null)->nullOnDelete()->nullable();
             $table->string('avatar')->default('');
             $table->float('lat');
             $table->float('lng');
