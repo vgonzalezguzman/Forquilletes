@@ -5,16 +5,17 @@
                 <h1 class="text-3xl font-semibold mb-3">Benvingut, {{ user.name }}.</h1>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-24">
-                    <div v-for="restaurant in restaurants"
-                        class="max-w-sm bg-white border border-gray-200 rounded-lg lg:w-full h-full shadow dark:bg-gray-800 dark:border-gray-700">
+                    <div v-for="restaurant in restaurants" :key="restaurant.id"
+                        class="max-w-sm bg-white border border-gray-200 rounded-lg lg:w-full shadow dark:bg-gray-800 dark:border-gray-700">
                         <a href="#">
-                            <img class="rounded-t-lg object-cover w-full h-1/2"
+                            <img class="rounded-t-lg object-cover w-full h-48"
                                 :src="functionFormatUrl(restaurant.avatar)" :alt="restaurant.name" />
                         </a>
-                        <div class="p-5 w-full h-1/2">
+                        <div class="p-5 w-full h-48">
                             <a href="#">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{
-                                    restaurant.name }}</h5>
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    {{ restaurant.name }}
+                                </h5>
                             </a>
                             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ restaurant.description }}
                             </p>
@@ -28,6 +29,9 @@
                                 </svg>
                             </a>
                         </div>
+                        <div class="h-48 w-full">
+                            <Map :restaurants="restaurant"></Map>
+                        </div>
                     </div>
                 </div>
 
@@ -38,17 +42,18 @@
 
 <script setup>
 import Layout from '@/Components/Layout.vue';
+import Map from '@/Components/Map.vue';
+
 const props = defineProps({
     user: Object,
-    restaurants: Object
+    restaurants: Array
 });
 
 const user = props.user;
 const restaurants = props.restaurants;
 
 function functionFormatUrl(url) {
-    const pfp = '/storage/' + url;
-    return pfp;
+    return '/storage/' + url;
 }
 </script>
 

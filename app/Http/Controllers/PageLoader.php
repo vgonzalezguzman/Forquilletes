@@ -10,8 +10,10 @@ class PageLoader extends Controller
 {
     public function home(Request $request)
     {
+        $restaurants = Restaurant::all();
         return Inertia::render('Home', [
             'user' => $request->user(),
+            'restaurants' => $restaurants,
         ]);
     }
 

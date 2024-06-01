@@ -37,7 +37,7 @@ const pfp = user ? '/storage/' + user.avatar : null;
 
 <template>
     <div class="flex flex-col w-full h-svh overflow-hidden textColor">
-        <nav class="flex flex-row w-full items-center justify-between p-3 z-50 background border-b border-gray-400">
+        <nav class="flex flex-row w-full items-center justify-between p-1 z-50 background border-b border-gray-400">
 
             <div class="w-1/3">
                 <div class="flex justify-center w-10 align-center accent rounded">
@@ -71,7 +71,7 @@ const pfp = user ? '/storage/' + user.avatar : null;
                 </a>
                 <div v-if="user" id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
                     data-dropdown-placement="bottom-start"
-                    class="flex cursor-pointer hover:shadow-md lg:w-4/6 h-10 p-2 items-center gap-4">
+                    class="flex cursor-pointer hover:shadow-md lg:w-4/6 h-10 p-6 items-center gap-4">
                     <img class="w-9 h-9 rounded-full" :src="pfp" alt="">
 
                     <div class="hidden lg:flex lg:flex-col font-medium dark:text-white">
@@ -80,7 +80,7 @@ const pfp = user ? '/storage/' + user.avatar : null;
                     </div>
                 </div>
                 <div v-if="user" id="userDropdown"
-                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-47 dark:bg-gray-700 dark:divide-gray-600">
+                    class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-47 dark:bg-gray-700 dark:divide-gray-600">
                     <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
                         <div>{{ user.name }}</div>
                         <div class="font-medium truncate">{{ user.email }}</div>

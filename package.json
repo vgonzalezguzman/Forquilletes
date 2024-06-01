@@ -17,6 +17,7 @@
         "@inertiajs/vue3": "^1.1.0",
         "@vitejs/plugin-vue": "^5.0.4",
         "flowbite": "^2.3.0",
+        "leaflet": "^1.9.4",
         "vue": "^3.4.27",
         "vue-router": "^4.0.13"
     }
