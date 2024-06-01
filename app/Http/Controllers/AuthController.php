@@ -7,24 +7,39 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
 
-class UserController extends Controller
+class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'profileImg' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-        ]);
+            $file = $request->file('profileImg');
+            $path = null;
 
-        return response()->json($user, 201);
+            if ($file) {
+                $path = $file->store('images', 'public');
+            }
+
+            $user = new User;
+            $user->role = 1;
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->avatar = $path;
+            $user->password = $request->input('password');
+            $user->save();
+
+            return response()->json(['success' => true, 'user' => $user], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function login(Request $request)
@@ -51,7 +66,7 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json(['message' => 'Logged out successfully'], 200);
+        return redirect('/');
     }
 
     public function destroy(User $user)

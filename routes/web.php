@@ -2,17 +2,20 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PageLoader;
+use App\Http\Middleware\Session;
 
-Route::get('/', function () {
-    return Inertia::render('Home');
-});
+Route::get('/', [PageLoader::class, 'home']);
 
+Route::get('/dashboard', [PageLoader::class, 'dashboard'])->middleware(Session::class);
+
+Route::get('/test', [AuthController::class, 'test'])->middleware(Session::class);
 
 Route::get('/register', function () {return Inertia::render('Register');});
-Route::post('/register/send', [UserController::class, 'register'])->name('register');
+Route::post('/register/send', [AuthController::class, 'register'])->name('register');
 Route::get('/login', function () {return Inertia::render('Login');});
-Route::post('/login/send', [UserController::class, 'login'])->name('login');
-Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-Route::delete('/delete/{user}', [UserController::class, 'delete'])->name('delete');
-Route::put('/update/{user}', [UserController::class, 'update'])->name('update');
+Route::post('/login/send', [AuthController::class, 'login'])->name('login');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::delete('/delete/{user}', [AuthController::class, 'delete'])->name('delete');
+Route::put('/update/{user}', [AuthController::class, 'update'])->name('update');
