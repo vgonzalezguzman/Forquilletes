@@ -7,7 +7,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-24">
                     <div v-for="restaurant in restaurants" :key="restaurant.id"
                         class="max-w-sm bg-white border border-gray-200 rounded-lg lg:w-full shadow dark:bg-gray-800 dark:border-gray-700">
-                        <a href="#">
+                        <a :href="'/restaurant/' + restaurant.id">
                             <img class="rounded-t-lg object-cover w-full h-48"
                                 :src="functionFormatUrl(restaurant.avatar)" :alt="restaurant.name" />
                         </a>
@@ -19,7 +19,7 @@
                             </a>
                             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ restaurant.description }}
                             </p>
-                            <a href="#"
+                            <a :href="'/restaurant/' + restaurant.id"
                                 class="inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent">
                                 Detalls
                                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"

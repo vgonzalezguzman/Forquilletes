@@ -17,7 +17,7 @@
                 <p class="text-lg">No et preocupis si no te'n recordes dels carrers, som el teu mapa!</p>
             </div>
         </div>
-        <Map class="w-full h-2/6" :restaurants="restaurants" :mapId="'map-1'"></Map>
+        <Map class="w-full h-2/6" :restaurants="restaurants"></Map>
     </Layout>
 </template>
 
