@@ -12,7 +12,8 @@ Route::get('/', [PageLoader::class, 'home']);
 
 Route::get('/dashboard', [PageLoader::class, 'dashboard'])->middleware(Session::class);
 
-Route::get('/restaurant/{id}', [RestaurantController::class, 'index'])->middleware(Session::class);
+Route::get('/restaurant/show/{id}', [RestaurantController::class, 'index']);
+Route::get('/restaurant/create', [RestaurantController::class, 'renderCreate'])->middleware(Session::class);
 
 Route::get('/register', function () {return Inertia::render('Register');});
 Route::post('/register/send', [AuthController::class, 'register'])->name('register');

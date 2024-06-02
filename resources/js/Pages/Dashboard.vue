@@ -19,7 +19,7 @@
                             </a>
                             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ restaurant.description }}
                             </p>
-                            <a :href="'/restaurant/' + restaurant.id"
+                            <a :href="'/restaurant/show/' + restaurant.id"
                                 class="inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent">
                                 Detalls
                                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"

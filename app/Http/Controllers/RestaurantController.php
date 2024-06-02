@@ -11,10 +11,21 @@ class RestaurantController extends Controller
     public function index(Request $request, $id)
     {
         $restaurant = Restaurant::find($id);
-        return Inertia::render('Restaurant/Index',
+        return Inertia::render(
+            'Restaurant/Index',
             [
                 'user' => $request->user(),
                 'restaurant' => $restaurant,
+            ]
+        );
+    }
+
+    public function renderCreate(Request $request)
+    {
+        return Inertia::render(
+            'Restaurant/Create',
+            [
+                'user' => $request->user(),
             ]
         );
     }

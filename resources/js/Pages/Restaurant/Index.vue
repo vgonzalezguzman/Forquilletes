@@ -7,7 +7,9 @@
                     <h1 class="text-3xl font-semibold p-3">{{ restaurant.name }}</h1>
                     <p class="text-lg">{{ restaurant.description }}</p>
                     <ImageGallery class="py-3"></ImageGallery>
-                    <Map class="w-full h-1/6" :restaurants="restaurant"></Map>
+                    <div class="w-full h-1/3">
+                        <Map class="w-full h-full" :restaurants="restaurant"></Map>
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,7 +32,6 @@ function functionFormatUrl(url) {
 </script>
 
 <style scoped>
-/* Ensure the parent container can scroll */
 div.overflow-y-auto {
     max-height: 100%;
 }

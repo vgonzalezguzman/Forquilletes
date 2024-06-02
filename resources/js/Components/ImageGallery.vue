@@ -11,16 +11,12 @@
             </div>
           </template>
         </div>
-        <!-- Slider controls -->
         <button @click="prevImage" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer focus:outline-none">
-          <!-- Previous button icon -->
         </button>
         <button @click="nextImage" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer focus:outline-none">
-          <!-- Next button icon -->
         </button>
       </div>
       
-      <!-- Thumbnails -->
       <div class="grid grid-cols-5 gap-4 mt-4">
         <template v-for="(image, index) in images" :key="index">
           <div @click="changeImage(index)" class="cursor-pointer">
