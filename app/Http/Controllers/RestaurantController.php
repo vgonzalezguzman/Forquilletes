@@ -23,6 +23,21 @@ class RestaurantController extends Controller
         );
     }
 
+    public function editRestaurant(Request $request, $id) {
+        $restaurant = Restaurant::find($id);
+        $gallery = RestaurantImage::where('rId', $id)->get();
+        $contacts = RestaurantContact::where('rId', $id)->get();
+        return Inertia::render(
+            'Restaurant/Edit',
+            [
+                'user' => $request->user(),
+                'restaurant' => $restaurant,
+                'gallery' => $gallery,
+                'contacts' => $contacts,
+            ]
+        );
+    }
+
     public function renderCreate(Request $request)
     {
         $contacts = Contact::all();
