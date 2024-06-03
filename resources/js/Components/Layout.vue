@@ -116,7 +116,7 @@ const pfp = user ? '/storage/' + user.avatar : null;
                 <a href="/aboutUs">Sobre Nosaltres</a>
             </aside>
 
-            <main class="w-full overflow-auto" @click="handleMainClick">
+            <main class="w-full h-full overflow-auto" @click="handleMainClick">
                 <slot :user="user"></slot>
                 <div v-if="drawerNavigation" class="fixed inset-0 bg-black opacity-20 z-10"></div>
             </main>

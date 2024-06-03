@@ -1,7 +1,7 @@
 <template>
     <Layout :user="user" class="flex flex-col w-full h-full ">
         <div class="flex flex-col items-center justify-center pt-0 w-full h-full p-3 overflow-y-auto">
-            <div class="flex mt-80 md:mt-32 lg:mt-4">
+            <div class="flex mt-80 md:mt-32 lg:mt-4 xl:mt-56">
                 <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-24 mt-96">
                     <h1 class="flex text-3xl justify-center items-center font-semibold p-3">Afegeix un nou restaurant
                     </h1>
@@ -37,7 +37,7 @@
                                 for="grid-name">
                                 Nom del restaurant
                             </label>
-                            <input v-model="form.name"
+                            <input v-model="name"
                                 :class="{ 'appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white': !nameIsValid, 'appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500': nameIsValid }"
                                 id="grid-name" type="text" placeholder="El Gran Sol">
                             <p v-if="!nameIsValid" class="text-red-600 text-xs italic">El nom no és vàlid.</p>
@@ -49,7 +49,7 @@
                             <label for="description"
                                 class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Descripció</label>
                             <div class="mt-2">
-                                <textarea id="description" name="description" rows="3" v-model="form.description"
+                                <textarea id="description" name="description" rows="3" v-model="description"
                                     placeholder="Escriu una petita descripció del restaurant."
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
                             </div>
@@ -69,14 +69,38 @@
                     </div>
 
                     <div class="flex flex-wrap -mx-3 mb-6">
-                        <div class="w-full px-3" v-for="contact in contacts" :key="contact.type">
+                        <div class="w-full px-3">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                :for="'grid-' + contact.type">
-                                {{ contact.name }}
+                                for="grid-email">
+                                Email
                             </label>
-                            <input v-model="form[contact.type]" :aria-label="contact.name"
+                            <input v-model="email" aria-label="Email"
                                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                :id="'grid-' + contact.type" :type="contact.type" :placeholder="contact.name">
+                                id="grid-email" type="email" placeholder="Email">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                for="grid-phone">
+                                Número de telèfon
+                            </label>
+                            <input v-model="phone" aria-label="Número de telèfon"
+                                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="grid-phone" type="phone" placeholder="Número de telèfon">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                for="grid-website">
+                                Pàgina web
+                            </label>
+                            <input v-model="website" aria-label="Pàgina web"
+                                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="grid-website" type="website" placeholder="Pàgina web">
                         </div>
                     </div>
 
@@ -86,7 +110,7 @@
                                 for="grid-map">
                                 Localització del restaurant
                             </label>
-                            <MapInput class="appearance-none block w-full  rounded mb-3" :value="mapValue"
+                            <MapInput class="appearance-none block w-full  rounded mb-3"
                                 :update-value="updateMapValue" />
                             <p v-if="!addressIsValid" class="text-red-600 text-xs italic">El nom no és vàlid.</p>
                         </div>
@@ -140,27 +164,21 @@ import { ref, computed } from 'vue';
 import axios from 'axios';
 
 const props = defineProps({
-    user: Object,
-    contacts: Array
+    user: Object
 });
 
 const user = ref(props.user);
-const contacts = ref(props.contacts);
-
-const form = ref({
-    name: '',
-    description: '',
-    ...props.contacts.reduce((acc, contact) => {
-        acc[contact.type] = '';
-        return acc;
-    }, {})
-});
 
 const defaultImageUrl = 'https://img.icons8.com/fluency/144/restaurant-building.png';
 const imageUrl = ref(defaultImageUrl);
 const avatar = ref(null);
 const gallery = ref([]);
 const showModal = ref(false);
+const name = ref('');
+const description = ref('');
+const email = ref('');
+const phone = ref('');
+const website = ref('');
 const serverResponse = ref('');
 const responseIsError = ref(false);
 const mapValue = ref({ lat: 0, lng: 0, address: '' });
@@ -182,7 +200,7 @@ const addressIsValid = computed(() => {
 });
 
 const nameIsValid = computed(() => {
-    return form.value.name.trim() !== '';
+    return name.value.trim() !== '';
 });
 
 const closeModal = () => {
@@ -213,11 +231,11 @@ const handleGalleryChange = (event) => {
 const uploadData = async () => {
     try {
         const formData = new FormData();
-        formData.append('name', form.value.name);
-        formData.append('description', form.value.description);
-        formData.append('email', form.value.email);
-        formData.append('phone', form.value.phone);
-        formData.append('webpage', form.value.webpage);
+        formData.append('name', name.value);
+        formData.append('description', description.value);
+        formData.append('email', email.value);
+        formData.append('phone', phone.value);
+        formData.append('website', website.value);
         formData.append('address', mapValue.value.address);
         formData.append('lat', mapValue.value.lat);
         formData.append('lng', mapValue.value.lng);

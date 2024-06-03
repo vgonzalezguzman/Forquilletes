@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('address', 500)->default('');
             $table->foreignId('owner')->nullable()->references('id')->on('users')->default(null)->nullOnDelete()->nullable();
             $table->foreignId('uploader')->nullable()->references('id')->on('users')->default(null)->nullOnDelete()->nullable();
+            $table->string('email')->default('');
+            $table->string('phone')->default('');
+            $table->string('website')->default('');
             $table->string('avatar')->default('');
             $table->float('lat');
             $table->float('lng');

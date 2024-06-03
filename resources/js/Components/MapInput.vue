@@ -1,10 +1,13 @@
 <template>
     <div class="relative w-full h-full z-10">
         <div class="flex flex-row relative w-full h-1/6 mb-1">
-            <input type="text" v-model="searchAddress" :disabled="loading" placeholder="Buscar una localització"
+            <input type="text" v-if="props.value" v-model="searchAddress" :disabled="loading"
+                placeholder="Buscar una localització" aria-label="Buscar una localització" :value="props.value.address"
+                class="appearance-none block w-5/6 bg-gray-200 text-gray-700 border mr-3 border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
+            <input type="text" v-if="!props.value" v-model="searchAddress" :disabled="loading" placeholder="Buscar una localització"
                 aria-label="Buscar una localització"
                 class="appearance-none block w-5/6 bg-gray-200 text-gray-700 border mr-3 border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
-            <button @click.prevent="searchLocation" :disabled="loading"
+            <button @click.prevent="searchLocation" :disabled="loading" aria-label="Buscar"
                 class="flex justify-center font-semibold accent w-1/6 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 <img src="https://img.icons8.com/ios/100/search--v1.png" class="h-full" alt="">
             </button>
@@ -45,10 +48,7 @@ import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 
 const props = defineProps({
-    value: {
-        type: Object,
-        required: true
-    },
+    value: Object,
     updateValue: Function
 });
 
@@ -62,20 +62,25 @@ const state = reactive({
 });
 
 onMounted(() => {
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
-                initializeMap(userLat, userLng);
-            },
-            error => {
-                console.error("Error getting user location:", error);
-                initializeMap(41.39490497774026, 2.1754966309966473);
-            }
-        );
+    if (props.value) {
+        initializeMap(props.value.lat, props.value.lng);
+        updateLocation(props.value.lat, props.value.lng, props.value.address);
     } else {
-        initializeMap(41.39490497774026, 2.1754966309966473);
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    initializeMap(userLat, userLng);
+                },
+                error => {
+                    console.error("Error getting user location:", error);
+                    initializeMap(41.39490497774026, 2.1754966309966473);
+                }
+            );
+        } else {
+            initializeMap(41.39490497774026, 2.1754966309966473);
+        }
     }
 });
 
