@@ -12,8 +12,8 @@ class ContactsSeeder extends Seeder
      */
     public function run(): void
     {
-        Contact::create(['type' => 'E-mail']);
-        Contact::create(['type' => 'Teléfono']);
-        Contact::create(['type' => 'Uber Eats']);
+        Contact::create(['name' => 'E-mail', 'type' => 'email']);
+        Contact::create(['name' => 'Teléfono', 'type' => 'phone']);
+        Contact::create(['name' => 'Pàgina Web', 'type' => 'webpage']);
     }
 }

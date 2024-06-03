@@ -29,7 +29,7 @@
                                 </svg>
                             </a>
                         </div>
-                        <div class="h-48 w-full">
+                        <div class="h-48 w-full mt-5">
                             <Map :restaurants="restaurant"></Map>
                         </div>
                     </div>

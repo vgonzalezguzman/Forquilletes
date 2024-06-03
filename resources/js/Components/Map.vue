@@ -42,5 +42,4 @@ onMounted(() => {
     <div ref="mapElement" class="w-full h-full z-10"></div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
