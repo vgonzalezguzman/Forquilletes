@@ -40,70 +40,72 @@ class RestaurantController extends Controller
     public function update(Request $request)
     {
         try {
-            $oldId = $request->input('oldId');
-            $oldAvatar = $request->input('oldAvatar');
-            $name = $request->input('name');
-            $description = $request->input('description');
-            $email = $request->input('email');
-            $phone = $request->input('phone');
-            $website = $request->input('website');
-            $address = $request->input('address');
-            $lat = $request->input('lat');
-            $lng = $request->input('lng');
+            if ($request->user()->id == $request->input('uploader')) {
+                $oldId = $request->input('oldId');
+                $oldAvatar = $request->input('oldAvatar');
+                $name = $request->input('name');
+                $description = $request->input('description');
+                $email = $request->input('email');
+                $phone = $request->input('phone');
+                $website = $request->input('website');
+                $address = $request->input('address');
+                $lat = $request->input('lat');
+                $lng = $request->input('lng');
 
-            $file = $request->file('eventImg');
-            $path = null;
+                $file = $request->file('eventImg');
+                $path = null;
 
-            if ($file) {
-                $path = $file->store('images', 'public');
-                Storage::disk('public')->delete($oldAvatar);
-            }
-
-            $restaurant = Restaurant::find($oldId);
-            if ($name) {
-                $restaurant->name = $name;
-            }
-            if ($description) {
-                $restaurant->description = $description;
-            }
-            if ($email) {
-                $restaurant->email = $email;
-            }
-            if ($phone) {
-                $restaurant->phone = $phone;
-            }
-            if ($website) {
-                $restaurant->website = $website;
-            }
-            if ($address) {
-                $restaurant->address = $address;
-                $restaurant->lat = $lat;
-                $restaurant->lng = $lng;
-            }
-            if ($path) {
-                $restaurant->avatar = $path;
-            }
-            $restaurant->save();
-
-            if ($request->hasFile('galleryToUpload')) {
-                foreach ($request->file('galleryToUpload') as $galleryImage) {
-                    $galleryPath = $galleryImage->store('images', 'public');
-                    RestaurantImage::create([
-                        'rId' => $oldId,
-                        'url' => $galleryPath,
-                    ]);
+                if ($file) {
+                    $path = $file->store('images', 'public');
+                    Storage::disk('public')->delete($oldAvatar);
                 }
-            }
 
-            if ($request->input('imageToDelete')) {
-                foreach ($request->input('imageToDelete') as $imagetoDelete) {
-                    $image = RestaurantImage::find($imagetoDelete);
-                    Storage::disk('public')->delete($image->url);
-                    $image->delete();
+                $restaurant = Restaurant::find($oldId);
+                if ($name) {
+                    $restaurant->name = $name;
                 }
-            }
+                if ($description) {
+                    $restaurant->description = $description;
+                }
+                if ($email) {
+                    $restaurant->email = $email;
+                }
+                if ($phone) {
+                    $restaurant->phone = $phone;
+                }
+                if ($website) {
+                    $restaurant->website = $website;
+                }
+                if ($address) {
+                    $restaurant->address = $address;
+                    $restaurant->lat = $lat;
+                    $restaurant->lng = $lng;
+                }
+                if ($path) {
+                    $restaurant->avatar = $path;
+                }
+                $restaurant->save();
 
-            return response()->json(['message' => 'Restaurant updated successfully']);
+                if ($request->hasFile('galleryToUpload')) {
+                    foreach ($request->file('galleryToUpload') as $galleryImage) {
+                        $galleryPath = $galleryImage->store('images', 'public');
+                        RestaurantImage::create([
+                            'rId' => $oldId,
+                            'url' => $galleryPath,
+                        ]);
+                    }
+                }
+
+                if ($request->input('imageToDelete')) {
+                    foreach ($request->input('imageToDelete') as $imagetoDelete) {
+                        $image = RestaurantImage::find($imagetoDelete);
+                        Storage::disk('public')->delete($image->url);
+                        $image->delete();
+                    }
+                }
+
+                return response()->json(['message' => 'Restaurant updated successfully']);
+            }
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

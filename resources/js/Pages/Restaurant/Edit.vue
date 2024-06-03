@@ -323,6 +323,7 @@ const uploadData = async () => {
     try {
         const formData = new FormData();
         formData.append('oldId', restaurant.value.id);
+        formData.append('uploader', restaurant.value.uploader);
         formData.append('oldAvatar', restaurant.value.avatar);
         formData.append('eventImg', avatar.value);
         formData.append('name', name.value);
