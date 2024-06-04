@@ -10,7 +10,10 @@ class PageLoader extends Controller
 {
     public function home(Request $request)
     {
-        $restaurants = Restaurant::all();
+        $restaurants = Restaurant::with('comments')
+            ->withCount('comments')
+            ->withAvg('comments', 'rating')
+            ->get();
         return Inertia::render('Home', [
             'user' => $request->user(),
             'restaurants' => $restaurants,
@@ -19,7 +22,10 @@ class PageLoader extends Controller
 
     public function dashboard(Request $request)
     {
-        $restaurants = Restaurant::all();
+        $restaurants = Restaurant::with('comments')
+            ->withCount('comments')
+            ->withAvg('comments', 'rating')
+            ->get();
         return Inertia::render('Dashboard', [
             'user' => $request->user(),
             'restaurants' => $restaurants,

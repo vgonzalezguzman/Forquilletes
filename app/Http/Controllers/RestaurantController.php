@@ -344,13 +344,13 @@ class RestaurantController extends Controller
 
     public function renderMap(Request $request)
     {
-        $restaurants = Restaurant::all();
-        return Inertia::render(
-            'Map',
-            [
-                'user' => $request->user(),
-                'restaurants' => $restaurants
-            ]
-        );
+        $restaurants = Restaurant::with('comments')
+            ->withCount('comments')
+            ->withAvg('comments', 'rating')
+            ->get();
+        return Inertia::render('Map', [
+            'user' => $request->user(),
+            'restaurants' => $restaurants
+        ]);
     }
 }

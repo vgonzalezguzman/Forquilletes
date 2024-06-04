@@ -37,4 +37,9 @@ class Restaurant extends Model
     {
         return $this->belongsTo(User::class, 'uploader');
     }
+    
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'rId');
+    }
 }
