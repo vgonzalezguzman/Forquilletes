@@ -8,16 +8,18 @@
                     <p class="text-lg">{{ restaurant.description }}</p>
 
                     <div class="flex flex-row w-full justify-center">
-                        <a :href="'/restaurant/edit/' + restaurant.id"
-                            v-if="user.id === restaurant.uploader || user.id === restaurant.owner"
-                            class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-3/6">
-                            Editar
-                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                            </svg>
-                        </a>
+                        <div v-if="user">
+                            <a :href="'/restaurant/edit/' + restaurant.id"
+                                v-if="user.id === restaurant.uploader || user.id === restaurant.owner"
+                                class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-3/6">
+                                Editar
+                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                </svg>
+                            </a>
+                        </div>
                         <button @click.prevent="showComments()"
                             class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-3/6">
                             Opinions
@@ -39,7 +41,7 @@
                             </div>
                         </button>
                     </div>
-                    <Comments :comments="comments" :closeModal="hideComments" :restaurantId="restaurant.id" class="py-3"
+                    <Comments :user="user" :comments="comments" :closeModal="hideComments" :restaurantId="restaurant.id" class="py-3"
                         v-if="isModalVisible">
                     </Comments>
                     <ImageGallery v-if="gallery.length > 0" :gallery="gallery" class="py-3"></ImageGallery>

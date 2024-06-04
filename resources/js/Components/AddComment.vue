@@ -181,7 +181,7 @@ const closeResultModal = () => {
                             </h3>
                             <div class="mt-2">
                                 <p class="text-sm text-gray-500">
-                                    El comentari no s'ha pogut modificar.
+                                    El comentari no s'ha pogut crear.
                                 </p>
                             </div>
                         </div>
@@ -205,11 +205,11 @@ const closeResultModal = () => {
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                             <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                Comentari modificat
+                                Comentari creat
                             </h3>
                             <div class="mt-2">
                                 <p class="text-sm text-gray-500">
-                                    Comentari modificat correctament.
+                                    Comentari creat correctament.
                                 </p>
                             </div>
                         </div>

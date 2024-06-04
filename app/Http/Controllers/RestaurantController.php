@@ -32,6 +32,7 @@ class RestaurantController extends Controller
                 'created' => $comment->created_at,
                 'updated' => $comment->updated_at,
                 'user' => [
+                    'id' => $comment->user->id,
                     'name' => $comment->user->name,
                     'email' => $comment->user->email,
                     'avatar' => $comment->user->avatar,

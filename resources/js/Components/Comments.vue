@@ -5,6 +5,10 @@ import AddComment from '@/Components/AddComment.vue';
 import { ref } from 'vue';
 
 const props = defineProps({
+    user: {
+        type: Object,
+        required: true
+    },
     comments: {
         type: [Array, Object],
         required: true
@@ -106,7 +110,7 @@ const deleteComment = async () => {
                                     </h3>
                                     <div
                                         class="flex justify-center items-center px-4 py-3 w-2/6 sm:px-6 sm:flex sm:flex-row-reverse">
-                                        <button @click="addComment" type="button"
+                                        <button @click="addComment" type="button" v-if="user"
                                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
                                             +
                                         </button>
@@ -134,12 +138,12 @@ const deleteComment = async () => {
                                                 {{ comment.user.email }}
                                             </p>
                                         </div>
-                                        <div class="flex w-2/6">
-                                            <button @click="openEditModal(comment)" type="button"
+                                        <div class="flex w-2/6" v-if="user">
+                                            <button @click="openEditModal(comment)" type="button" v-if="user.id == comment.user.id"
                                                 class="mt-3 inline-flex justify-center w-1/2 rounded-md border m-1 border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
                                                 Editar
                                             </button>
-                                            <button @click="showDeleteModal(comment.id)" type="button"
+                                            <button @click="showDeleteModal(comment.id)" type="button" v-if="user.id == comment.user.id"
                                                 class="mt-3 inline-flex justify-center w-1/2 rounded-md border m-1 border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor" class="h-6 w-6">
