@@ -2,7 +2,7 @@
     <Layout :user="user" class="flex flex-col w-full h-full">
         <div class="flex flex-col items-center justify-center pt-0 w-full h-full p-3 overflow-y-auto">
             <div class="flex w-full justify-center items-center mt-80 md:mt-32 lg:mt-4 xl:mt-1 2xl:mt-56">
-                <form class="bg-white shadow-md md:5/6 lg:w-1/3 rounded px-8 pt-6 pb-8 mb-24 mt-80">
+                <form class="bg-white shadow-md w-full md:5/6 lg:w-1/3 rounded px-8 pt-6 pb-8 mb-24 mt-80">
                     <h1 class="flex text-3xl justify-center items-center font-semibold p-3">Editar restaurant</h1>
 
                     <div class="flex flex-col -mx-3 mb-6">
@@ -118,8 +118,12 @@
                         <input :disabled="!isValidForm"
                             :class="{ 'cursor-not-allowed': !isValidForm, 'cursor-pointer': isValidForm }" type="submit"
                             @click.prevent="showModifyModal"
-                            class="font-semibold accent py-2 px-4 mr-5 rounded focus:outline-none focus:shadow-outline"
-                            value="Actualitzar restaurant">
+                            class="font-semibold accent py-2 px-4 mr-5 w-1/3 rounded focus:outline-none focus:shadow-outline"
+                            value="Actualitzar">
+                        <input type="submit"
+                            @click.prevent="showDeleteModal"
+                            class="font-semibold cursor-pointer bg-red-500 py-2 px-4 w-1/3 mr-5 rounded focus:outline-none focus:shadow-outline"
+                            value="Eliminar">
                     </div>
                 </form>
             </div>
@@ -247,6 +251,68 @@
                 </div>
             </div>
         </transition>
+
+        <transition name="modal">
+            <div v-if="deleteRestaurantModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-30 flex items-center justify-center z-50">
+                <div
+                    class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+                    <div class="bg-white p-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                    Eliminar restaurant
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">
+                                        Vols eliminar aquest restaurant?
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button @click="deleteRestaurant" type="button"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 accent text-base font-medium sm:ml-3 sm:w-auto sm:text-sm">
+                            Eliminar
+                        </button>
+                        <button @click="closeDeleteModal" type="button"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
+                            Cancel·lar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+        <transition name="modal">
+            <div v-if="deleteRestaurantModalError"
+                class="fixed inset-0 bg-gray-600 bg-opacity-30 flex items-center justify-center z-50">
+                <div
+                    class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+                    <div class="bg-white p-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                    Error
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">
+                                        No s'ha pogut eliminar el restaurant.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button @click="closeDeleteModalError" type="button"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
+                            Tancar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </transition>
     </Layout>
 </template>
 
@@ -262,7 +328,42 @@ const props = defineProps({
     gallery: Array,
 });
 
+const deleteRestaurantModal = ref(false);
 
+const showDeleteModal = () => {
+    deleteRestaurantModal.value = true;
+};
+
+const closeDeleteModal = () => {
+    deleteRestaurantModal.value = false;
+}
+
+const deleteRestaurant = async () => {
+    try {
+        const formData = new FormData();
+        formData.append('restaurant', restaurant.value.id);
+        formData.append('uploader', restaurant.value.uploader);
+        formData.append('owner', restaurant.value.owner);
+
+        const response = await axios.post('/restaurant/delete', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        closeDeleteModal();
+        window.location.href = '/dashboard';
+        console.log(response);
+    } catch (error) {
+        deleteRestaurantModalError.value = true;
+        console.error(error);
+    }
+};
+
+const deleteRestaurantModalError = ref(false);
+
+const closeDeleteModalError = () => {
+    deleteRestaurantModalError.value = false;
+};
 
 const user = ref(props.user);
 const restaurant = ref(props.restaurant);
@@ -324,6 +425,7 @@ const uploadData = async () => {
         const formData = new FormData();
         formData.append('oldId', restaurant.value.id);
         formData.append('uploader', restaurant.value.uploader);
+        formData.append('owner', restaurant.value.owner);
         formData.append('oldAvatar', restaurant.value.avatar);
         formData.append('eventImg', avatar.value);
         formData.append('name', name.value);

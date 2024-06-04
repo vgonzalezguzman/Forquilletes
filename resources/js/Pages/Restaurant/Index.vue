@@ -6,7 +6,7 @@
                 <div class="w-full">
                     <h1 class="text-3xl font-semibold p-3">{{ restaurant.name }}</h1>
                     <p class="text-lg">{{ restaurant.description }}</p>
-                    <a :href="'/restaurant/edit/' + restaurant.id" v-if="user.id === restaurant.uploader"
+                    <a :href="'/restaurant/edit/' + restaurant.id" v-if="user.id === restaurant.uploader || user.id === restaurant.owner"
                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent">
                         Editar
                         <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"

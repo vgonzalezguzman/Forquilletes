@@ -7,7 +7,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-24">
                     <div v-for="restaurant in restaurants" :key="restaurant.id"
                         class="max-w-sm bg-white border border-gray-200 rounded-lg lg:w-full shadow dark:bg-gray-800 dark:border-gray-700">
-                        <a :href="'/restaurant/' + restaurant.id">
+                        <a :href="'/restaurant/show/' + restaurant.id">
                             <img class="rounded-t-lg object-cover w-full h-48"
                                 :src="functionFormatUrl(restaurant.avatar)" :alt="restaurant.name" />
                         </a>

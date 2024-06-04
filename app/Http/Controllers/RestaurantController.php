@@ -40,7 +40,7 @@ class RestaurantController extends Controller
     public function update(Request $request)
     {
         try {
-            if ($request->user()->id == $request->input('uploader')) {
+            if ($request->user()->id == $request->input('uploader') || $request->user()->id == $request->input('owner')) {
                 $oldId = $request->input('oldId');
                 $oldAvatar = $request->input('oldAvatar');
                 $name = $request->input('name');
@@ -105,12 +105,13 @@ class RestaurantController extends Controller
                 }
 
                 return response()->json(['message' => 'Restaurant updated successfully']);
+            } else {
+                return response()->json(['error' => 'You are not authorized to update this restaurant'], 403);
             }
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
 
     public function renderCreate(Request $request)
     {
@@ -170,6 +171,27 @@ class RestaurantController extends Controller
             }
 
             return response()->json(201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    public function delete(Request $request)
+    {
+        try {
+            if ($request->user()->id == $request->input('uploader') || $request->user()->id == $request->input('owner')) {
+                $id = $request->input('restaurant');
+                $restaurant = Restaurant::find($id);
+                $gallery = RestaurantImage::where('rId', $id)->get();
+                foreach ($gallery as $image) {
+                    Storage::disk('public')->delete($image->url);
+                    $image->delete();
+                }
+                Storage::disk('public')->delete($restaurant->avatar);
+                $restaurant->delete();
+                return response()->json(['message' => 'Restaurant deleted successfully']);
+            } else {
+                return response()->json(['error' => 'You are not authorized to delete this restaurant'], 403);
+            }
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
