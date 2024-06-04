@@ -18,7 +18,7 @@ class RestaurantController extends Controller
     {
         $restaurant = Restaurant::find($id);
         $gallery = RestaurantImage::where('rId', $id)->get();
-        $owner = User::where('id', $restaurant->owner)->first();
+        $owner = User::where('id', $restaurant->owner ?? null)->first();
         $comments = Comment::with([
             'user' => function ($query) {
                 $query->select('id', 'name', 'email', 'avatar');
@@ -41,6 +41,7 @@ class RestaurantController extends Controller
                 'rating' => $comment->rating,
                 'images' => $comment->commentImages->map(function ($image) {
                     return [
+                        'id' => $image->id,
                         'url' => $image->url
                     ];
                 })->toArray(),
@@ -96,6 +97,68 @@ class RestaurantController extends Controller
             return response()->json(['message' => 'Comment added successfully']);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to save comment'], 500);
+        }
+    }
+
+    public function updateComment(Request $request)
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string|max:255',
+                'rating' => 'required|integer',
+                'cId' => 'required|integer',
+            ]);
+
+            $cId = $request->input('cId');
+            $title = $request->input('title');
+            $description = $request->input('description');
+            $rating = $request->input('rating');
+
+            $comment = Comment::find($cId);
+            $comment->title = $title;
+            $comment->description = $description;
+            $comment->rating = $rating;
+            $comment->save();
+
+            if ($request->hasFile('galleryToUpload')) {
+                foreach ($request->file('galleryToUpload') as $galleryImage) {
+                    $galleryPath = $galleryImage->store('images', 'public');
+                    CommentImage::create([
+                        'cId' => $comment->id,
+                        'url' => $galleryPath,
+                    ]);
+                }
+            }
+
+            if ($request->input('imageToDelete')) {
+                foreach ($request->input('imageToDelete') as $imagetoDelete) {
+                    $image = CommentImage::find($imagetoDelete);
+                    Storage::disk('public')->delete($image->url);
+                    $image->delete();
+                }
+            }
+
+            return response()->json(200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete comment'], 500);
+        }
+    }
+
+    public function deleteComment(Request $request)
+    {
+        try {
+            $commentId = $request->input('commentId');
+            $comment = Comment::find($commentId);
+            $images = CommentImage::where('cId', $commentId)->get();
+            foreach ($images as $image) {
+                Storage::disk('public')->delete($image->url);
+                $image->delete();
+            }
+            $comment->delete();
+            return response()->json([$comment]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete comment'], 500);
         }
     }
 

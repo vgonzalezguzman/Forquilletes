@@ -21,7 +21,6 @@ const props = defineProps({
 
 const addCommentModal = ref(false);
 const editModal = ref(false);
-const openDeleteModal = ref(false);
 const commentToEdit = ref([]);
 
 const openEditModal = (comment) => {
@@ -58,6 +57,37 @@ function formatDate(dateString) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Intl.DateTimeFormat('ca', options).format(date);
 }
+
+const deleteCommentModal = ref(false);
+const commentToDelete = ref('');
+
+const showDeleteModal = (id) => {
+    deleteCommentModal.value = true;
+    commentToDelete.value = id;
+};
+
+const closeDeleteModal = () => {
+    deleteCommentModal.value = false;
+    commentToDelete.value = '';
+}
+
+const deleteComment = async () => {
+    try {
+        const formData = new FormData();
+        formData.append('commentId', commentToDelete.value);
+
+        const response = await axios.post('/restaurant/comment/delete', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        window.location.href = '/restaurant/show/' + rId.value;
+        console.log(response);
+    } catch (error) {
+        deleteCommentModal.value = true;
+        console.error(error);
+    }
+};
 </script>
 
 <template>
@@ -105,11 +135,11 @@ function formatDate(dateString) {
                                             </p>
                                         </div>
                                         <div class="flex w-2/6">
-                                            <button @click="openEditModal(coment)" type="button"
+                                            <button @click="openEditModal(comment)" type="button"
                                                 class="mt-3 inline-flex justify-center w-1/2 rounded-md border m-1 border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
                                                 Editar
                                             </button>
-                                            <button @click="openDeleteModal" type="button"
+                                            <button @click="showDeleteModal(comment.id)" type="button"
                                                 class="mt-3 inline-flex justify-center w-1/2 rounded-md border m-1 border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor" class="h-6 w-6">
@@ -124,9 +154,6 @@ function formatDate(dateString) {
                                     </p>
                                     <p class="text-md">
                                         {{ comment.description }}
-                                    </p>
-                                    <p class="text-md">
-                                        {{ comment }}
                                     </p>
                                     <div class="flex items-center">
                                         <span class="text-md pr-3">Valoració:</span>
@@ -157,10 +184,41 @@ function formatDate(dateString) {
             </div>
         </div>
     </transition>
-
+    <transition name="modal">
+        <div v-if="deleteCommentModal"
+            class="fixed inset-0 bg-gray-600 bg-opacity-30 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+                <div class="bg-white p-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Eliminar comentari
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    Vols eliminar aquest comentari?
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button @click="deleteComment" type="button"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 accent text-base font-medium sm:ml-3 sm:w-auto sm:text-sm">
+                        Eliminar
+                    </button>
+                    <button @click="closeDeleteModal" type="button"
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
+                        Cancel·lar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </transition>
     <AddComment v-if="addCommentModal" :restaurantId="rId" :closeCommentModal="closeCommentModal" v-bind="$attrs">
     </AddComment>
-    <EditComment v-if="editModal" :comment="commentToEdit" :closeEditCommentModal="closeEditCommentModal" v-bind="$attrs">
+    <EditComment v-if="editModal" :comment="commentToEdit" :closeEditCommentModal="closeEditCommentModal"
+        v-bind="$attrs">
     </EditComment>
 </template>
 

@@ -40,8 +40,10 @@ const uploadComment = async () => {
                 'Content-Type': 'multipart/form-data'
             }
         });
+        openResultModal();
         console.log(response);
     } catch (error) {
+        openErrorModal();
         console.error(error);
     }
 };
@@ -66,6 +68,27 @@ const descriptionIsValid = computed(() => {
 const ratingIsValid = computed(() => {
     return rating.value > 0;
 });
+
+const isErrorModalVisible = ref(false);
+
+const openErrorModal = () => {
+    isErrorModalVisible.value = true;
+};
+
+const closeErrorModal = () => {
+    isErrorModalVisible.value = false;
+};
+
+const isResultModalVisible = ref(false);
+
+const openResultModal = () => {
+    isResultModalVisible.value = true;
+};
+
+const closeResultModal = () => {
+    isResultModalVisible.value = false;
+    window.location.href = `/restaurant/show/${rId}`;
+};
 </script>
 
 <template>
@@ -96,7 +119,8 @@ const ratingIsValid = computed(() => {
                                     placeholder="Escriu una petita descripció de la teva experiència."
                                     :class="{ 'shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white': !descriptionIsValid, 'shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500': descriptionIsValid }">
                                 </textarea>
-                                <p v-if="!descriptionIsValid" class="text-red-600 text-xs italic">La descripció no és vàlida.
+                                <p v-if="!descriptionIsValid" class="text-red-600 text-xs italic">La descripció no és
+                                    vàlida.
                                 </p>
                             </div>
                         </div>
@@ -140,6 +164,62 @@ const ratingIsValid = computed(() => {
                         </div>
 
                     </form>
+                </div>
+            </div>
+        </div>
+    </transition>
+
+    <transition name="modal">
+        <div v-if="isErrorModalVisible"
+            class="fixed inset-0 bg-gray-600 bg-opacity-30 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+                <div class="bg-white p-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Error
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    El comentari no s'ha pogut modificar.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button @click="closeErrorModal" type="button"
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
+                        Tancar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </transition>
+
+    <transition name="modal">
+        <div v-if="isResultModalVisible"
+            class="fixed inset-0 bg-gray-600 bg-opacity-30 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+                <div class="bg-white p-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Comentari modificat
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    Comentari modificat correctament.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button @click="closeResultModal" type="button"
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
+                        Tancar
+                    </button>
                 </div>
             </div>
         </div>
