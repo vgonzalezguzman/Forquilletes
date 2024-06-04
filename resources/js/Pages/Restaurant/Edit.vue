@@ -129,37 +129,7 @@
             </div>
         </div>
 
-        <transition name="modal">
-            <div v-if="isGalleryModalVisible"
-                class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50">
-                <div
-                    class="bg-white rounded-lg m-3 p-3 overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
-                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 mt-4">
-                        <div class="relative w-full px-3" v-for="(image, index) in gallery" :key="image.id">
-                            <label for="description"
-                                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"></label>
-                            <img :src="functionFormatUrl(image.url)" class="h-auto max-w-full rounded-lg" alt="">
-                            <button @click.prevent="confirmDelete(index)" aria-label="Borrar imatge"
-                                class="absolute top-0 right-0 p-2 bg-red-500 text-white rounded-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" class="h-6 w-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <button @click.prevent="closeGalleryModal()" class="absolute top-0 right-0"
-                        aria-label="Tencar galeria">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            class="h-6 w-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </transition>
+        <GalleryInput v-if="isGalleryModalVisible" :images="gallery" :confirmDelete="confirmDelete" :closeModal="closeGalleryModal"></GalleryInput>
 
         <transition name="modal">
             <div v-if="isModalVisible"
@@ -319,6 +289,7 @@
 <script setup>
 import Layout from '@/Components/Layout.vue';
 import MapInput from '../../Components/MapInput.vue';
+import GalleryInput from '../../Components/GalleryInput.vue';
 import { ref, computed } from 'vue';
 import axios from 'axios';
 
@@ -534,7 +505,7 @@ const closeModifyModal = () => {
 }
 
 .accent {
-    background-color: #FD4D79;
+    background-color: #E1C4FF;
 }
 
 #profile_image:hover~#profile_image_overlay {

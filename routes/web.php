@@ -18,8 +18,9 @@ Route::post('/restaurant/create/upload', [RestaurantController::class, 'create']
 Route::get('/restaurant/edit/{id}', [RestaurantController::class, 'renderEdit'])->middleware(Session::class);
 Route::post('/restaurant/update', [RestaurantController::class, 'update'])->middleware(Session::class);
 Route::post('/restaurant/delete', [RestaurantController::class, 'delete'])->middleware(Session::class);
+Route::post('/restaurant/comment/upload', [RestaurantController::class, 'uploadComment'])->middleware(Session::class);
 
-Route::get('/register', function () {return Inertia::render('Register');});
+Route::get('/register', [AuthController::class, 'renderRegister']);
 Route::post('/register/send', [AuthController::class, 'register'])->name('register');
 Route::get('/login', function () {return Inertia::render('Login');});
 Route::post('/login/send', [AuthController::class, 'login'])->name('login');

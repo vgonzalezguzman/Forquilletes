@@ -76,6 +76,6 @@ const logIn = async () => {
 }
 
 .accent {
-    background-color: #FD4D79;
+    background-color: #E1C4FF;
 }
 </style>

@@ -11,6 +11,12 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
+    public function renderRegister(Request $request)
+    {
+        $lockedEmails = User::all()->pluck('email')->toArray();
+        return Inertia::render('Register', ['lockedEmails' => $lockedEmails]);
+    }
+
     public function register(Request $request)
     {
         try {

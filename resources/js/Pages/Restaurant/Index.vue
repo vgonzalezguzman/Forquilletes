@@ -6,17 +6,33 @@
                 <div class="flex flex-col w-full justify-center items-center">
                     <h1 class="text-3xl font-semibold p-3">{{ restaurant.name }}</h1>
                     <p class="text-lg">{{ restaurant.description }}</p>
-                    <a :href="'/restaurant/edit/' + restaurant.id" v-if="user.id === restaurant.uploader || user.id === restaurant.owner"
-                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent">
-                        Editar
-                        <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M1 5h12m0 0L9 1m4 4L9 9" />
-                        </svg>
-                    </a>
-                    <ImageGallery :gallery="gallery" class="py-3"></ImageGallery>
 
+                    <div class="flex flex-row w-full justify-center">
+                        <a :href="'/restaurant/edit/' + restaurant.id"
+                            v-if="user.id === restaurant.uploader || user.id === restaurant.owner"
+                            class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-1/3">
+                            Editar
+                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                            </svg>
+                        </a>
+                        <button @click.prevent="showComments()"
+                            class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-1/3">
+                            Opinions ({{ averageRating.toFixed(1) }})
+                            <template v-for="star in getAverageRatingStars()">
+                                <label :for="'star' + star.value" class="text-gray-400"
+                                    :class="{ 'text-yellow-400': star.filled }">
+                                    ★
+                                </label>
+                            </template>
+                        </button>
+                    </div>
+                    <Comments :comments="comments" :closeModal="hideComments" :restaurantId="restaurant.id" class="py-3"
+                        v-if="isModalVisible">
+                    </Comments>
+                    <ImageGallery v-if="gallery.length > 0" :gallery="gallery" class="py-3"></ImageGallery>
                     <div class="py-3">
                         <p>Informació:</p>
                         <p v-if="restaurant.owner">Propietari: {{ owner.name }}</p>
@@ -25,12 +41,13 @@
                         <p v-else>Sembla que el restaurant no té una direcció de correu assignada.</p>
                         <p v-if="restaurant.phone">Nº de telèfon: {{ restaurant.phone }}</p>
                         <p v-else>Sembla que el restaurant no té un telèfon assignat.</p>
-                        <p v-if="restaurant.website">Pàgina: <a :href="restaurant.website">{{ restaurant.website }}</a></p>
+                        <p v-if="restaurant.website">Pàgina: <a :href="restaurant.website">{{ restaurant.website }}</a>
+                        </p>
                         <p v-else>Sembla que el restaurant no té una pàgina assignada.</p>
                         <p>Creat: {{ formatDate(restaurant.created_at) }}</p>
                         <p>Actualitzat: {{ formatDate(restaurant.updated_at) }}</p>
                         <p>Direcció: {{ restaurant.address }}</p>
-                    </div>                    
+                    </div>
                     <div class="w-full h-44">
                         <Map class="w-full h-full" :restaurants="restaurant"></Map>
                     </div>
@@ -44,17 +61,60 @@
 import Layout from '@/Components/Layout.vue';
 import Map from '@/Components/Map.vue';
 import ImageGallery from '@/Components/ImageGallery.vue';
+import Comments from '@/Components/Comments.vue';
+import { ref, computed } from 'vue';
 
-defineProps({
+const props = defineProps({
     user: Object,
     restaurant: Object,
     gallery: Array,
-    owner: Object
+    owner: Object,
+    comments: Array
 });
+
+const user = ref(props.user);
+const restaurant = ref(props.restaurant);
+const gallery = ref(props.gallery);
+const owner = ref(props.owner);
+const comments = ref(props.comments);
+
+const averageRating = computed(() => {
+    if (comments.value.length === 0) return 0;
+
+    const totalRating = comments.value.reduce((acc, comment) => {
+        return acc + comment.rating;
+    }, 0);
+
+    return totalRating / comments.value.length;
+});
+
+function getAverageRatingStars() {
+    const roundedRating = Math.round(averageRating.value);
+    const stars = [];
+
+    for (let i = 1; i <= 5; i++) {
+        stars.push({
+            value: i,
+            filled: i <= roundedRating
+        });
+    }
+
+    return stars;
+}
+
+const isModalVisible = ref(false);
+
+const showComments = () => {
+    isModalVisible.value = true;
+};
+
+const hideComments = () => {
+    isModalVisible.value = false;
+};
 
 function formatDate(dateString) {
     const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric'};
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Intl.DateTimeFormat('ca', options).format(date);
 }
 
@@ -69,6 +129,6 @@ div.overflow-y-auto {
 }
 
 .accent {
-    background-color: #FD4D79;
+    background-color: #E1C4FF;
 }
 </style>

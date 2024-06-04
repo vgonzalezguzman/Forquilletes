@@ -4,8 +4,8 @@
             <input type="text" v-if="props.value" v-model="searchAddress" :disabled="loading"
                 placeholder="Buscar una localització" aria-label="Buscar una localització" :value="props.value.address"
                 class="appearance-none block w-5/6 bg-gray-200 text-gray-700 border mr-3 border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
-            <input type="text" v-if="!props.value" v-model="searchAddress" :disabled="loading" placeholder="Buscar una localització"
-                aria-label="Buscar una localització"
+            <input type="text" v-if="!props.value" v-model="searchAddress" :disabled="loading"
+                placeholder="Buscar una localització" aria-label="Buscar una localització"
                 class="appearance-none block w-5/6 bg-gray-200 text-gray-700 border mr-3 border-gray-200 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" />
             <button @click.prevent="searchLocation" :disabled="loading" aria-label="Buscar"
                 class="flex justify-center font-semibold accent w-1/6 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -176,10 +176,10 @@ const closeErrorModal = () => {
 
 <style scoped>
 .accent {
-    background-color: #FD4D79;
+    background-color: #E1C4FF;
 }
 
 .accent-fill {
-    fill: #FD4D79;
+    fill: #E1C4FF;
 }
 </style>

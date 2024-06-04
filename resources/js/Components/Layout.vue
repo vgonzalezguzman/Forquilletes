@@ -143,10 +143,10 @@ const pfp = user ? '/storage/' + user.avatar : null;
 }
 
 .secondary {
-    background-color: #FD72BB;
+    background-color: #E1C4FF;
 }
 
 .accent {
-    background-color: #FD4D79;
+    background-color: #E1C4FF;
 }
 </style>

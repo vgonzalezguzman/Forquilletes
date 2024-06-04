@@ -50,8 +50,11 @@
                                 class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Descripció</label>
                             <div class="mt-2">
                                 <textarea id="description" name="description" rows="3" v-model="description"
-                                    placeholder="Escriu una petita descripció del restaurant."
-                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                                    placeholder="Escriu una petita descripció de la teva experiència."
+                                    :class="{ 'shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white': !descriptionIsValid, 'shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500': descriptionIsValid }">
+                                </textarea>
+                                <p v-if="!descriptionIsValid" class="text-red-600 text-xs italic">La descripció no és vàlida.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -188,11 +191,15 @@ const updateMapValue = (newValue) => {
 };
 
 const isValidForm = computed(() => {
-    return nameIsValid.value && imageIsValid.value && addressIsValid.value;
+    return nameIsValid.value && descriptionIsValid.value && imageIsValid.value && addressIsValid.value;
 });
 
 const imageIsValid = computed(() => {
     return avatar.value !== null;
+});
+
+const descriptionIsValid = computed(() => {
+    return description.value.trim() !== '';
 });
 
 const addressIsValid = computed(() => {
@@ -285,7 +292,7 @@ const redirectHome = () => {
 }
 
 .accent {
-    background-color: #FD4D79;
+    background-color: #E1C4FF;
 }
 
 #profile_image:hover~#profile_image_overlay {

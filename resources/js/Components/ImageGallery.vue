@@ -34,11 +34,11 @@
       </div>
 
       <div class="flex justify-center mt-4">
-        <button v-if="!expanded" @click="expandImages"
+        <button v-if="images.length > 5 && !expanded" @click="expandImages"
           class="px-6 py-2 rounded-full shadow-md hover:bg-gray-300 focus:outline-none transition duration-300">
           Veure més
         </button>
-        <button v-else @click="retractImages"
+        <button v-else-if="expanded" @click="retractImages"
           class="px-6 py-2 rounded-full shadow-md hover:bg-gray-300 focus:outline-none transition duration-300">
           Veure menys
         </button>

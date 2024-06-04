@@ -9,18 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('rId')->nullable()->references('id')->on('restaurants')->nullOnDelete()->required();
-            $table->foreignId('uId')->nullable()->references('id')->on('users')->nullOnDelete()->required();
-            $table->string('title', 100);
-            $table->string('description', 700);
+            $table->foreignId('rId')->constrained('restaurants');
+            $table->foreignId('uId')->constrained('users');
+            $table->string('title');
+            $table->text('description');
             $table->integer('rating');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

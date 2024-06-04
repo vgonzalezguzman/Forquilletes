@@ -121,6 +121,12 @@ import Layout from '@/Components/Layout.vue';
 import { ref, computed } from 'vue';
 import axios from 'axios';
 
+const props = defineProps({
+    lockedEmails: Object
+});
+
+const lockedEmails = ref(props.lockedEmails);
+
 const name = ref('');
 const email = ref('');
 const password = ref('');
@@ -141,8 +147,11 @@ const nameIsValid = computed(() => {
 });
 const emailIsValid = computed(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email.value);
+    if (emailRegex.test(email.value)) {
+        return !lockedEmails.value.includes(email.value);
+    }
 });
+
 const passwordIsValid = computed(() => {
     return password.value.length >= 8;
 });
@@ -218,7 +227,7 @@ const redirectHome = () => {
 }
 
 .accent {
-    background-color: #FD4D79;
+    background-color: #E1C4FF;
 }
 
 #profile_image:hover~#profile_image_overlay {

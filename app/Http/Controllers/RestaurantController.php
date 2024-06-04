@@ -8,6 +8,8 @@ use Inertia\Inertia;
 use App\Models\Restaurant;
 use App\Models\RestaurantImage;
 use App\Models\User;
+use App\Models\Comment;
+use App\Models\CommentImage;
 use Illuminate\Support\Facades\Storage;
 
 class RestaurantController extends Controller
@@ -17,15 +19,82 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::find($id);
         $gallery = RestaurantImage::where('rId', $id)->get();
         $owner = User::where('id', $restaurant->owner)->first();
+        $comments = Comment::with([
+            'user' => function ($query) {
+                $query->select('id', 'name', 'email', 'avatar');
+            },
+            'commentImages'
+        ])->where('rId', $id)->get(['id', 'rId', 'uId', 'title', 'description', 'rating']);
+        $comments = $comments->map(function ($comment) {
+            return [
+                'id' => $comment->id,
+                'restaurant_id' => $comment->rId,
+                'user' => [
+                    'name' => $comment->user->name,
+                    'email' => $comment->user->email,
+                    'avatar' => $comment->user->avatar,
+                ],
+                'title' => $comment->title,
+                'description' => $comment->description,
+                'rating' => $comment->rating,
+                'images' => $comment->commentImages->map(function ($image) {
+                    return [
+                        'url' => $image->url
+                    ];
+                })->toArray(),
+            ];
+        });
+
         return Inertia::render(
             'Restaurant/Index',
             [
                 'user' => $request->user(),
                 'restaurant' => $restaurant,
                 'gallery' => $gallery,
-                'owner' => $owner
+                'owner' => $owner,
+                'comments' => $comments
             ]
         );
+    }
+
+    public function uploadComment(Request $request)
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string|max:255',
+                'rating' => 'required|integer',
+                'restaurant_id' => 'required|integer',
+            ]);
+
+            $uId = $request->user()->id;
+            $rId = $request->input('restaurant_id');
+            $title = $request->input('title');
+            $description = $request->input('description');
+            $rating = $request->input('rating');
+
+            $comment = new Comment();
+            $comment->rId = $rId;
+            $comment->uId = $uId;
+            $comment->title = $title;
+            $comment->description = $description;
+            $comment->rating = $rating;
+            $comment->save();
+
+            if ($request->hasFile('gallery')) {
+                foreach ($request->file('gallery') as $galleryImage) {
+                    $galleryPath = $galleryImage->store('images', 'public');
+                    CommentImage::create([
+                        'cId' => $comment->id,
+                        'url' => $galleryPath,
+                    ]);
+                }
+            }
+
+            return response()->json(['message' => 'Comment added successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to save comment'], 500);
+        }
     }
 
     public function renderEdit(Request $request, $id)
@@ -157,9 +226,15 @@ class RestaurantController extends Controller
             $restaurant->description = $description;
             $restaurant->address = $address;
             $restaurant->uploader = $request->user()->id;
-            $restaurant->email = $email;
-            $restaurant->phone = $phone;
-            $restaurant->website = $website;
+            if ($email) {
+                $restaurant->email = $email;
+            }
+            if ($phone) {
+                $restaurant->phone = $phone;
+            }
+            if ($website) {
+                $restaurant->website = $website;
+            }
             $restaurant->avatar = $path;
             $restaurant->lat = $lat;
             $restaurant->lng = $lng;
