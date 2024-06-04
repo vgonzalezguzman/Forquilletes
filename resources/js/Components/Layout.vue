@@ -95,8 +95,8 @@ const pfp = user ? '/storage/' + user.avatar : null;
                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Afegir un restaurant</a>
                         </li>
                         <li>
-                            <a href="#"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Opcións</a>
+                            <a href="/map"
+                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mapa</a>
                         </li>
                     </ul>
                     <div class="py-1">
@@ -113,7 +113,7 @@ const pfp = user ? '/storage/' + user.avatar : null;
             <aside v-if="drawerNavigation"
                 class="flex absolute text-lg flex-col h-full p-3 w-2/3 md:w-1/3 lg:w-1/6 z-50 secondary border-r border-gray-400">
                 <a href="/" class="mb-2">Inici</a>
-                <a href="/aboutUs">Sobre Nosaltres</a>
+                <a href="/map">Mapa</a>
             </aside>
 
             <main class="w-full h-full overflow-auto" @click="handleMainClick">

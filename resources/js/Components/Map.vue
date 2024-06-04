@@ -1,7 +1,8 @@
 <script setup>
-import { onMounted, defineProps, ref } from 'vue';
+import { onMounted, watch, defineProps, ref } from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { debounce } from 'lodash-es';
 
 const props = defineProps({
     restaurants: {
@@ -11,13 +12,21 @@ const props = defineProps({
 });
 
 const mapElement = ref(null);
+let map;
+let markerGroup;
 
-onMounted(() => {
-    const map = L.map(mapElement.value);
+const initializeMap = () => {
+    map = L.map(mapElement.value);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
+};
+
+const updateMarkers = () => {
+    if (markerGroup) {
+        markerGroup.clearLayers();
+    }
 
     let markers;
     if (Array.isArray(props.restaurants)) {
@@ -33,9 +42,18 @@ onMounted(() => {
         ];
     }
 
-    const markerGroup = L.featureGroup(markers).addTo(map);
+    markerGroup = L.featureGroup(markers).addTo(map);
     map.fitBounds(markerGroup.getBounds());
+};
+
+onMounted(() => {
+    initializeMap();
+    updateMarkers();
 });
+
+const debouncedUpdateMarkers = debounce(updateMarkers, 300);
+
+watch(() => props.restaurants, debouncedUpdateMarkers, { deep: true });
 </script>
 
 <template>

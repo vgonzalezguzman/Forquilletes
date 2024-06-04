@@ -341,4 +341,16 @@ class RestaurantController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function renderMap(Request $request)
+    {
+        $restaurants = Restaurant::all();
+        return Inertia::render(
+            'Map',
+            [
+                'user' => $request->user(),
+                'restaurants' => $restaurants
+            ]
+        );
+    }
 }

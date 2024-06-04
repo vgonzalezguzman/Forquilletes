@@ -22,6 +22,8 @@ Route::post('/restaurant/comment/upload', [RestaurantController::class, 'uploadC
 Route::post('/restaurant/comment/update', [RestaurantController::class, 'updateComment'])->middleware(Session::class);
 Route::post('/restaurant/comment/delete', [RestaurantController::class, 'deleteComment'])->middleware(Session::class);
 
+Route::get('/map', [RestaurantController::class, 'renderMap']);
+
 Route::get('/register', [AuthController::class, 'renderRegister']);
 Route::post('/register/send', [AuthController::class, 'register'])->name('register');
 Route::get('/login', function () {return Inertia::render('Login');});
