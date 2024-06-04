@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Restaurant;
 use App\Models\RestaurantImage;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class RestaurantController extends Controller
@@ -14,11 +15,15 @@ class RestaurantController extends Controller
     public function index(Request $request, $id)
     {
         $restaurant = Restaurant::find($id);
+        $gallery = RestaurantImage::where('rId', $id)->get();
+        $owner = User::where('id', $restaurant->owner)->first();
         return Inertia::render(
             'Restaurant/Index',
             [
                 'user' => $request->user(),
                 'restaurant' => $restaurant,
+                'gallery' => $gallery,
+                'owner' => $owner
             ]
         );
     }
