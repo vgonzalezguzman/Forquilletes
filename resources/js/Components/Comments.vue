@@ -1,6 +1,7 @@
 <script setup>
 import ImageGallery from '@/Components/ImageGallery.vue';
-import AddComment from './AddComment.vue';
+import EditComment from '@/Components/EditComment.vue';
+import AddComment from '@/Components/AddComment.vue';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -19,6 +20,19 @@ const props = defineProps({
 });
 
 const addCommentModal = ref(false);
+const editModal = ref(false);
+const openDeleteModal = ref(false);
+const commentToEdit = ref([]);
+
+const openEditModal = (comment) => {
+    commentToEdit.value = comment;
+    editModal.value = true;
+}
+
+const closeEditCommentModal = () => {
+    commentToEdit.value = [];
+    editModal.value = false;
+}
 
 const closeModal = () => {
     props.closeModal();
@@ -38,6 +52,11 @@ const rId = ref(props.restaurantId);
 
 function functionFormatUrl(url) {
     return '/storage/' + url;
+}
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Intl.DateTimeFormat('ca', options).format(date);
 }
 </script>
 
@@ -72,10 +91,12 @@ function functionFormatUrl(url) {
                                 </div>
                                 <div v-if="comments.length > 0" v-for="comment in comments" :key="comment.id"
                                     class="mt-3 p-3 shadow">
-                                    <div class="flex m-2">
-                                        <img class="w-10 h-10 rounded-full mr-3"
-                                            :src="functionFormatUrl(comment.user.avatar)" alt="">
-                                        <div class="flex flex-col">
+                                    <div class="flex w-full m-2">
+                                        <div class="w-1/6">
+                                            <img class="w-10 h-10 rounded-full mr-3"
+                                                :src="functionFormatUrl(comment.user.avatar)" alt="">
+                                        </div>
+                                        <div class="flex w-3/6 flex-col">
                                             <p class="text-sm">
                                                 {{ comment.user.name }}
                                             </p>
@@ -83,12 +104,29 @@ function functionFormatUrl(url) {
                                                 {{ comment.user.email }}
                                             </p>
                                         </div>
+                                        <div class="flex w-2/6">
+                                            <button @click="openEditModal(coment)" type="button"
+                                                class="mt-3 inline-flex justify-center w-1/2 rounded-md border m-1 border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
+                                                Editar
+                                            </button>
+                                            <button @click="openDeleteModal" type="button"
+                                                class="mt-3 inline-flex justify-center w-1/2 rounded-md border m-1 border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor" class="h-6 w-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                     <p class="text-lg">
                                         {{ comment.title }}
                                     </p>
                                     <p class="text-md">
                                         {{ comment.description }}
+                                    </p>
+                                    <p class="text-md">
+                                        {{ comment }}
                                     </p>
                                     <div class="flex items-center">
                                         <span class="text-md pr-3">Valoració:</span>
@@ -122,6 +160,8 @@ function functionFormatUrl(url) {
 
     <AddComment v-if="addCommentModal" :restaurantId="rId" :closeCommentModal="closeCommentModal" v-bind="$attrs">
     </AddComment>
+    <EditComment v-if="editModal" :comment="commentToEdit" :closeEditCommentModal="closeEditCommentModal" v-bind="$attrs">
+    </EditComment>
 </template>
 
 <style scoped>
