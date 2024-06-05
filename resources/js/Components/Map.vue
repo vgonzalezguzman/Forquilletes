@@ -46,6 +46,13 @@ const updateMarkers = () => {
         ];
     }
 
+    if (markers.length === 0) {
+        markers = [
+            L.marker([42.27357303860728, 2.964740495425216])
+                .bindPopup('No hi ha restaurants per mostrar')
+        ];
+    }
+
     markerGroup = L.featureGroup(markers).addTo(map);
     map.fitBounds(markerGroup.getBounds());
 };

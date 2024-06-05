@@ -4,8 +4,8 @@
             <div class="flex flex-col w-full items-center text-center">
                 <h1 class="text-3xl font-semibold mb-3">Benvingut, {{ user.name }}.</h1>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-24">
-                    <div v-if="restaurants.length > 0" v-for="restaurant in restaurants" :key="restaurant.id"
+                <div v-if="restaurants.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-24">
+                    <div v-for="restaurant in restaurants" :key="restaurant.id"
                         class="max-w-sm bg-white border border-gray-200 rounded-lg lg:w-full shadow dark:bg-gray-800 dark:border-gray-700">
                         <a :href="'/restaurant/show/' + restaurant.id">
                             <img class="rounded-t-lg object-cover w-full h-48"
@@ -33,18 +33,18 @@
                             <Map :restaurants="restaurant"></Map>
                         </div>
                     </div>
-                    <div v-else class="flex flex-col w-full justify-center items-center">
-                        <h3 class="text-xl justify-center items-center leading-6 font-medium text-gray-900"
-                            id="modal-title">
-                            Sembla que encara no hi ha cap restaurant!
-                        </h3>
-                        <a href="/restaurant/create" class="text-md justify-center items-center leading-6 font-medium text-gray-900"
-                            id="modal-title">
-                            Sigues el primer en pujar un restaurant!
-                        </a>
-                    </div>
                 </div>
-
+                <div v-else class="flex flex-col w-full justify-center items-center">
+                    <h3 class="text-xl justify-center items-center leading-6 font-medium text-gray-900"
+                        id="modal-title">
+                        Sembla que encara no hi ha cap restaurant!
+                    </h3>
+                    <a href="/restaurant/create"
+                        class="text-md justify-center items-center leading-6 font-medium text-gray-900"
+                        id="modal-title">
+                        Sigues el primer en pujar un restaurant!
+                    </a>
+                </div>
             </div>
         </div>
     </Layout>

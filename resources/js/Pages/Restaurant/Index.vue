@@ -47,8 +47,6 @@
                     <ImageGallery v-if="gallery.length > 0" :gallery="gallery" class="py-3"></ImageGallery>
                     <div class="py-3">
                         <p>Informació:</p>
-                        <p v-if="restaurant.owner">Propietari: {{ owner.name }}</p>
-                        <p v-else>Sembla que aquest restaurant no té un propietari assignat.</p>
                         <p v-if="restaurant.email">Correu: {{ restaurant.email }}</p>
                         <p v-else>Sembla que el restaurant no té una direcció de correu assignada.</p>
                         <p v-if="restaurant.phone">Nº de telèfon: {{ restaurant.phone }}</p>
