@@ -328,6 +328,15 @@ class RestaurantController extends Controller
                 $id = $request->input('restaurant');
                 $restaurant = Restaurant::find($id);
                 $gallery = RestaurantImage::where('rId', $id)->get();
+                $comments = Comment::where('rId', $id)->get();
+                foreach ($comments as $comment) {
+                    $images = CommentImage::where('cId', $comment->id)->get();
+                    foreach ($images as $image) {
+                        Storage::disk('public')->delete($image->url);
+                        $image->delete();
+                    }
+                    $comment->delete();
+                }
                 foreach ($gallery as $image) {
                     Storage::disk('public')->delete($image->url);
                     $image->delete();

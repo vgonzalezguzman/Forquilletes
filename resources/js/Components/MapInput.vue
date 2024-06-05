@@ -60,6 +60,13 @@ const state = reactive({
     marker: null,
     map: null
 });
+var greenIcon = L.icon({
+    iconUrl: 'https://img.icons8.com/color/96/marker--v1.png',
+
+    iconSize:     [30, 30],
+    iconAnchor:   [15, 15], 
+    popupAnchor:  [0, 0]
+});
 
 onMounted(() => {
     if (props.value) {
@@ -91,7 +98,7 @@ const initializeMap = (lat, lng) => {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(state.map);
 
-    state.marker = L.marker([lat, lng], { draggable: true }).addTo(state.map);
+    state.marker = L.marker([lat, lng], {icon: greenIcon}, { draggable: true }).addTo(state.map);
 
     state.marker.on('dragend', (e) => {
         const { lat, lng } = e.target.getLatLng();
