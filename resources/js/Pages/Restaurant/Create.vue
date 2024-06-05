@@ -1,7 +1,7 @@
 <template>
     <Layout :user="user" class="flex flex-col w-full h-full ">
         <div class="flex flex-col items-center justify-center pt-0 w-full h-full p-3 overflow-y-auto">
-            <div class="flex mt-80 md:mt-32 lg:mt-4 xl:mt-56">
+            <div class="flex mt-80 md:mt-32 lg:mt-4 xl:mt-80">
                 <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-24 mt-96">
                     <h1 class="flex text-3xl justify-center items-center font-semibold p-3">Afegeix un nou restaurant
                     </h1>
