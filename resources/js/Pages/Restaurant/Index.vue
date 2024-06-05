@@ -8,10 +8,10 @@
                     <p class="text-lg">{{ restaurant.description }}</p>
 
                     <div class="flex flex-row w-full justify-center">
-                        <div v-if="user">
+                        <div v-if="user" class="flex justify-center items-center w-3/6">
                             <a :href="'/restaurant/edit/' + restaurant.id"
                                 v-if="user.id === restaurant.uploader || user.id === restaurant.owner"
-                                class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-3/6">
+                                class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-full">
                                 Editar
                                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">

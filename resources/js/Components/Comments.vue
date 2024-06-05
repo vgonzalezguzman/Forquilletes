@@ -110,14 +110,14 @@ const deleteComment = async () => {
                                     </h3>
                                     <div
                                         class="flex justify-center items-center px-4 py-3 w-2/6 sm:px-6 sm:flex sm:flex-row-reverse">
-                                        <button @click="addComment" type="button" v-if="user"
+                                        <button @click="addComment" type="button" v-if="user" aria-label="Afegir Comentari"
                                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
                                             +
                                         </button>
                                     </div>
                                     <div
                                         class="flex justify-center items-center px-4 py-3 w-2/6 sm:px-6 sm:flex sm:flex-row-reverse">
-                                        <button @click="closeModal" type="button"
+                                        <button @click="closeModal" type="button" aria-label="Tancar comentaris"
                                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
                                             Tancar
                                         </button>
@@ -139,11 +139,11 @@ const deleteComment = async () => {
                                             </p>
                                         </div>
                                         <div class="flex w-2/6" v-if="user">
-                                            <button @click="openEditModal(comment)" type="button" v-if="user.id == comment.user.id"
+                                            <button @click="openEditModal(comment)" type="button" v-if="user.id == comment.user.id" aria-label="Editar Comentari"
                                                 class="mt-3 inline-flex justify-center w-1/2 rounded-md border m-1 border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
                                                 Editar
                                             </button>
-                                            <button @click="showDeleteModal(comment.id)" type="button" v-if="user.id == comment.user.id"
+                                            <button @click="showDeleteModal(comment.id)" type="button" v-if="user.id == comment.user.id" aria-label="Eliminar Comentari"
                                                 class="mt-3 inline-flex justify-center w-1/2 rounded-md border m-1 border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium sm:mt-0 sm:w-auto sm:text-sm">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor" class="h-6 w-6">
@@ -162,8 +162,8 @@ const deleteComment = async () => {
                                     <div class="flex items-center">
                                         <span class="text-md pr-3">Valoració:</span>
                                         <template v-for="i in 5" :key="i">
-                                            <label :for="'star' + i" class="text-gray-400"
-                                                :class="{ 'text-yellow-400': i <= comment.rating }">
+                                            <label :for="'star' + i" class="aria-inactive-star-element"
+                                                :class="{ 'aria-star-element': i <= comment.rating }">
                                                 ★
                                             </label>
                                         </template>
@@ -230,6 +230,14 @@ const deleteComment = async () => {
 .modal-enter-active,
 .modal-leave-active {
     transition: opacity 0.3s;
+}
+
+.aria-inactive-star-element {
+    color: #707783;
+}
+
+.aria-star-element {
+    color: #9e6d00;
 }
 
 .modal-enter,

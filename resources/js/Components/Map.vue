@@ -36,7 +36,7 @@ const updateMarkers = () => {
     if (Array.isArray(props.restaurants)) {
         markers = props.restaurants.map(restaurant =>
             L.marker([restaurant.lat, restaurant.lng])
-                .bindPopup(`<b>${restaurant.name}</b><br>${restaurant.description}<br><p class="flex">${getRatingStars(restaurant.comments_avg_rating)}</p><br><a href="/restaurant/show/${restaurant.id}">Més informació</a>`)
+                .bindPopup(`<b>${restaurant.name}</b><br>${restaurant.description}<br><p class="flex">${getRatingStars(restaurant.comments_avg_rating)}</p><br><a href="/restaurant/show/${restaurant.id}">Més informació</a>`,)
         );
     } else {
         const restaurant = props.restaurants;

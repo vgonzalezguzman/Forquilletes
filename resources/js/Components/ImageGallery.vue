@@ -11,13 +11,13 @@
             </div>
           </template>
         </div>
-        <button @click="prevImage"
+        <button @click="prevImage" aria-label="Imatge previa"
           class="absolute top-1/2 left-0 z-30 flex items-center justify-center h-12 w-12 -translate-y-1/2 bg-black bg-opacity-50 rounded-full text-white focus:outline-none hover:bg-opacity-75">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <button @click="nextImage"
+        <button @click="nextImage" aria-label="Imatge següent"
           class="absolute top-1/2 right-0 z-30 flex items-center justify-center h-12 w-12 -translate-y-1/2 bg-black bg-opacity-50 rounded-full text-white focus:outline-none hover:bg-opacity-75">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

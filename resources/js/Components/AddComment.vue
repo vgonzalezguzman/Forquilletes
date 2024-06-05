@@ -132,8 +132,8 @@ const closeResultModal = () => {
                             <div class="flex space-x-2">
                                 <template v-for="i in 5">
                                     <input type="radio" :id="'star' + i" :value="i" v-model="rating" class="hidden" />
-                                    <label :for="'star' + i" class="cursor-pointer text-gray-400"
-                                        :class="{ 'text-yellow-400': i <= rating }">
+                                    <label :for="'star' + i" class="cursor-pointer aria-inactive-star-element"
+                                        :class="{ 'aria-star-element': i <= rating }">
                                         ★
                                     </label>
                                 </template>
@@ -247,6 +247,14 @@ const closeResultModal = () => {
     background-color: #E1C4FF;
 }
 
+.aria-inactive-star-element {
+    color: #707783;
+}
+
+.aria-star-element {
+    color: #9e6d00;
+}
+
 #profile_image:hover~#profile_image_overlay {
     opacity: 100;
 }
@@ -262,7 +270,7 @@ const closeResultModal = () => {
 }
 
 input[type="radio"]:checked+label {
-    color: #FBBF24;
+    color: #9a6f00;
     /* Tailwind's yellow-400 color */
 }
 </style>
