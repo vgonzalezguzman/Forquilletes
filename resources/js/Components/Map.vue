@@ -18,6 +18,13 @@ const props = defineProps({
 const mapElement = ref(null);
 let map;
 let markerGroup;
+var greenIcon = L.icon({
+    iconUrl: 'https://img.icons8.com/color/96/marker--v1.png',
+
+    iconSize:     [30, 30],
+    iconAnchor:   [15, 15], 
+    popupAnchor:  [0, 0]
+});
 
 const initializeMap = () => {
     map = L.map(mapElement.value);
@@ -35,20 +42,20 @@ const updateMarkers = () => {
     let markers;
     if (Array.isArray(props.restaurants)) {
         markers = props.restaurants.map(restaurant =>
-            L.marker([restaurant.lat, restaurant.lng])
+            L.marker([restaurant.lat, restaurant.lng], {icon: greenIcon})
                 .bindPopup(`<b>${restaurant.name}</b><br>${restaurant.description}<br><p class="flex">${getRatingStars(restaurant.comments_avg_rating)}</p><br><a href="/restaurant/show/${restaurant.id}">Més informació</a>`,)
         );
     } else {
         const restaurant = props.restaurants;
         markers = [
-            L.marker([restaurant.lat, restaurant.lng])
+            L.marker([restaurant.lat, restaurant.lng], {icon: greenIcon})
                 .bindPopup(`<b>${restaurant.name}</b><br>${restaurant.description}`)
         ];
     }
 
     if (markers.length === 0) {
         markers = [
-            L.marker([42.27357303860728, 2.964740495425216])
+            L.marker([42.27357303860728, 2.964740495425216], {icon: greenIcon})
                 .bindPopup('No hi ha restaurants per mostrar')
         ];
     }
