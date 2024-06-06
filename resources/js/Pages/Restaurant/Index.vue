@@ -8,20 +8,18 @@
                     <p class="text-lg">{{ restaurant.description }}</p>
 
                     <div class="flex flex-row w-full justify-center">
-                        <div v-if="user && (user.id === restaurant.uploader || user.id === restaurant.owner)"
-                            class="flex justify-center items-center w-3/6">
-                            <a :href="'/restaurant/edit/' + restaurant.id"
-                                class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-full">
-                                Editar
-                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                </svg>
-                            </a>
-                        </div>
+                        <a :href="'/restaurant/edit/' + restaurant.id"
+                            v-if="user.id === restaurant.uploader || user.id === restaurant.owner"
+                            class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-2/6">
+                            Editar
+                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                            </svg>
+                        </a>
                         <button @click.prevent="showComments()"
-                            class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-3/6">
+                            class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-2/6">
                             Opinions
                             <div class="flex items-center">
                                 <template v-for="star in stars">
@@ -40,9 +38,14 @@
                                 </template>
                             </div>
                         </button>
+                        <button @click.prevent="showCarta()"
+                            class="inline-flex items-center align-center justify-center px-3 py-2 text-sm mx-3 font-medium text-center rounded-lg  focus:ring-4 focus:outline-none accent w-2/6">
+                            Carta
+                        </button>
                     </div>
-                    <Comments :user="user" :comments="comments" :closeModal="hideComments" :restaurantId="restaurant.id"
-                        class="py-3" v-if="isModalVisible">
+                    <Carta v-if="isCartaVisible" :closeModal="hideCarta" :restaurantId="restaurant.id" :types="types" :plats="plats"></Carta>
+                    <Comments :comments="comments" :closeModal="hideComments" :restaurantId="restaurant.id" class="py-3"
+                        v-if="isModalVisible">
                     </Comments>
                     <ImageGallery v-if="gallery.length > 0" :gallery="gallery" class="py-3"></ImageGallery>
                     <div class="py-3">
@@ -72,6 +75,7 @@ import Layout from '@/Components/Layout.vue';
 import Map from '@/Components/Map.vue';
 import ImageGallery from '@/Components/ImageGallery.vue';
 import Comments from '@/Components/Comments.vue';
+import Carta from '@/Components/CartaComponent.vue'
 import { ref, computed } from 'vue';
 
 const props = defineProps({
@@ -79,7 +83,9 @@ const props = defineProps({
     restaurant: Object,
     gallery: Array,
     owner: Object,
-    comments: Array
+    comments: Array,
+    types: Object,
+    plats: Object,
 });
 
 const user = ref(props.user);
@@ -87,6 +93,17 @@ const restaurant = ref(props.restaurant);
 const gallery = ref(props.gallery);
 const owner = ref(props.owner);
 const comments = ref(props.comments);
+const isCartaVisible = ref(false);
+const types = ref(props.types);
+const plats = ref(props.plats);
+
+const showCarta = () => {
+    isCartaVisible.value = true;
+}
+
+const hideCarta = () => {
+    isCartaVisible.value = false;
+}
 
 const averageRating = computed(() => {
     if (comments.value.length === 0) return 0;

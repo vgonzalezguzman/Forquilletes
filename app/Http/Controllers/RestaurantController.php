@@ -10,6 +10,8 @@ use App\Models\RestaurantImage;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\CommentImage;
+use App\Models\Plat;
+use App\Models\PlatType;
 use Illuminate\Support\Facades\Storage;
 
 class RestaurantController extends Controller
@@ -19,6 +21,8 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::find($id);
         $gallery = RestaurantImage::where('rId', $id)->get();
         $owner = User::where('id', $restaurant->owner ?? null)->first();
+        $types = PlatType::all();
+        $plats = Plat::where('rId', $id)->get();
         $comments = Comment::with([
             'user' => function ($query) {
                 $query->select('id', 'name', 'email', 'avatar');
@@ -56,7 +60,9 @@ class RestaurantController extends Controller
                 'restaurant' => $restaurant,
                 'gallery' => $gallery,
                 'owner' => $owner,
-                'comments' => $comments
+                'comments' => $comments,
+                'types' => $types,
+                'plats' => $plats,
             ]
         );
     }
