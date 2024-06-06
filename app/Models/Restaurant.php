@@ -42,4 +42,8 @@ class Restaurant extends Model
     {
         return $this->hasMany(Comment::class, 'rId');
     }
+    public function plats()
+    {
+        return $this->hasMany(Plat::class, 'rId');
+    }
 }
