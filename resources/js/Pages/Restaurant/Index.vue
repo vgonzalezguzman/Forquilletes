@@ -43,7 +43,7 @@
                             Carta
                         </button>
                     </div>
-                    <Carta v-if="isCartaVisible" :closeModal="hideCarta"></Carta>
+                    <Carta v-if="isCartaVisible" :closeModal="hideCarta" :restaurantId="restaurant.id" :types="types" :plats="plats"></Carta>
                     <Comments :comments="comments" :closeModal="hideComments" :restaurantId="restaurant.id" class="py-3"
                         v-if="isModalVisible">
                     </Comments>
@@ -85,7 +85,9 @@ const props = defineProps({
     restaurant: Object,
     gallery: Array,
     owner: Object,
-    comments: Array
+    comments: Array,
+    types: Object,
+    plats: Object,
 });
 
 const user = ref(props.user);
@@ -94,6 +96,8 @@ const gallery = ref(props.gallery);
 const owner = ref(props.owner);
 const comments = ref(props.comments);
 const isCartaVisible = ref(false);
+const types = ref(props.types);
+const plats = ref(props.plats);
 
 const showCarta = () => {
     isCartaVisible.value = true;

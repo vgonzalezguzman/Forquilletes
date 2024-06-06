@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class plat extends Model
+class Plat extends Model
 {
     use HasFactory;
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'rId',
         'name',
@@ -21,10 +25,6 @@ class plat extends Model
         return $this->belongsTo(Restaurant::class, 'rId');
     }
 
-    public function user()
-    {
-        return $this->belongsTo(PlatType::class, 'tId');
-    }
     public function type()
     {
         return $this->belongsTo(PlatType::class, 'tId');

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageLoader;
+use App\Http\Controllers\PlatController;
 use App\Http\Controllers\RestaurantController;
 
 use App\Http\Middleware\Session;
@@ -21,6 +22,10 @@ Route::post('/restaurant/delete', [RestaurantController::class, 'delete'])->midd
 Route::post('/restaurant/comment/upload', [RestaurantController::class, 'uploadComment'])->middleware(Session::class);
 Route::post('/restaurant/comment/update', [RestaurantController::class, 'updateComment'])->middleware(Session::class);
 Route::post('/restaurant/comment/delete', [RestaurantController::class, 'deleteComment'])->middleware(Session::class);
+
+Route::post('/plats/upload', [PlatController::class, 'create'])->middleware(Session::class);
+Route::post('/plats/edit', [PlatController::class, 'update'])->middleware(Session::class);
+Route::post('/plats/delete', [PlatController::class, 'delete'])->middleware(Session::class);
 
 Route::get('/map', [RestaurantController::class, 'renderMap']);
 
