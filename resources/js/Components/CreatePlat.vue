@@ -25,7 +25,7 @@ const types = ref(props.types);
 
 const title = ref('');
 const price = ref('');
-const selectedType = ref('');
+const selectedType = ref('Primers');
 
 const isValidForm = ref(true);
 const nameIsValid = ref(true);
